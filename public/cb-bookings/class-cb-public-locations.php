@@ -12,14 +12,15 @@
  */
 
 /**
- * This class includes display of items
+ * This class includes display of locations
  * *
- * @package   Commons_Booking_items
- * @author    Florian Egermann <florian@wielebenwir.de>
+ * @package   Commons_Booking_locations
+ * @author    Annesley Newholm <annesley_newholm@yahoo.it>
+ * @since     0.9.2.5
  *
  */
 
-class CB_Public_Items {
+class CB_Public_Locations {
 
     public $items;
 
@@ -31,21 +32,21 @@ class CB_Public_Items {
       $this->defaults = array( 
         'p' => '',
         'cat' => '',
-        'posts_per_page' => 10, 
-        'post_type' => 'cb_items', 
-        'orderby' => 'title', 
-        'order' => 'DESC',
+        'posts_per_page' => 1000,         // Can use -1 for all but not backward compatable
+        'post_type' => 'cb_locations',
+        // 'orderby' => 'title',          // Showing on a map, order not important
+        // 'order' => 'DESC',
       );
     }
 
   /**
-   * Get items
+   * Get locations
    * 
-   * @since     0.4.5
+   * @since     0.9.2.5
    * @param     mixed
    * @return    array
    */
-  public function get_Items( $the_query ) {
+  public function get_Locations( $the_query ) {
 
     $content = array();
 
@@ -68,7 +69,7 @@ class CB_Public_Items {
    * 
    * @TODO move this to main file so other classes can use it.
    *
-   * @since     0.4.5
+   * @since     0.9.2.5
    * @param     array
    * @return    array
    */
@@ -84,12 +85,12 @@ class CB_Public_Items {
       $array = array_filter( $array, 'strlen' ); // remove empty keys
       return ($array);
     }
-    
+
   /**
-   * Output the item list
-   * using foreach render_item_list()
+   * Output the location list
+   * using foreach render_location_list()
    * 
-   * @since     0.4.5
+   * @since     0.9.2.5
    * @param     args array
    * @return    array
    */
@@ -97,6 +98,12 @@ class CB_Public_Items {
    
     $content = '';
     $queryargs = $this->merge_args($args);  
+    
+    // Header and map
+    // TODO: Implement this as a shortcode
+    // $content .= "[commons-booking-map]";
+    // This commons-booking-map will, by default, plot all hCard's found in the page
+    $content .= '<div class="commons-init commons-booking-hcard-map">' . __('map loading') . '...</div>';
 
     $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
     $p = array( 'paged' => $paged );
@@ -105,16 +112,16 @@ class CB_Public_Items {
     
     $query = new WP_Query( $thequery );
     wp_reset_postdata();
-    $item_ids = $this->get_Items( $query );
+    $location_ids = $this->get_Locations( $query );
 
-    if ( is_array ($item_ids) ) { // if result
+    if ( is_array ($location_ids) ) { // if result
 
-      foreach ($item_ids as $item_id) {
-        $content .= $this->data->render_item_list( $item_id );
+      foreach ($location_ids as $location_id) {
+        $content .= $this->data->render_location_list( $location_id );
       }
 
       } else {
-        $content = __('No items found', 'commons-booking');
+        $content = __('No locations found', 'commons-booking');
       }
 
       $pagination = $this->item_pagination($query ); 
@@ -123,8 +130,8 @@ class CB_Public_Items {
   }
 
   public function item_pagination( $query ) {
-    $next = get_next_posts_link( __('Next items', 'commons-booking'), $query->max_num_pages );
-    $prev = get_previous_posts_link( __('Previous items', 'commons-booking') , $query->max_num_pages );
+    $next = get_next_posts_link( __('Next locations', 'commons-booking'), $query->max_num_pages );
+    $prev = get_previous_posts_link( __('Previous locations', 'commons-booking') , $query->max_num_pages );
     return $prev . $next;
   }
 }
