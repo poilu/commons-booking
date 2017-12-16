@@ -618,7 +618,9 @@ public function prepare_template_vars_timeframe ( $location, $timeframe ) {
     'timeframe_title' =>  $timeframe['timeframe_title'],
     'timeframe_id' =>  $timeframe['id'],
     'render_daynames' => $this->render_daynames,
-    'location_id' =>  $location['id']
+    'location_id' =>  $location['id'],
+    'location_latitude' => $location['address']['latitude'], //needed for OSM representation
+    'location_longitude' => $location['address']['longitude'], //needed for OSM representation
     );
   
   return $attributes;

@@ -20,7 +20,9 @@
       </div>
       <div class="cb-table">
       <div class="cb-address cb-row">
-        <a href="http://maps.google.com/?q=<?=$tf['address'] ?>" target="_blank" class="cb-button align-right cb-small"><?=_e( 'Show in Maps', 'commons-booking' ); ?></a>
+        <?php if ($tf['location_latitude'] && $tf['location_longitude']) : ?>
+          <a href="https://www.openstreetmap.org/?mlat=<?=$tf['location_latitude']?>&mlon=<?=$tf['location_longitude']?>#map=18/<?=$tf['location_latitude']?>/<?=$tf['location_longitude']?>" target="_blank" class="cb-button align-right cb-small"><?=_e( 'Show in Maps', 'commons-booking' ); ?></a>
+        <?php endif; ?>
         <span class="cb-row-title"><?=_e('Address', 'commons-booking'); ?></span>
         <?=$tf['address'] ?></div>
       <div class="cb-opening-hours cb-row"><span class="cb-row-title"><?=_e('Opening hours', 'commons-booking'); ?></span><?=$tf['opening_hours'] ?></div>
